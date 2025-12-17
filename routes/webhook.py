@@ -44,17 +44,17 @@ def parse_kixie_payload(raw_data: dict) -> KixieCallEvent:
     # Extract contact name based on call direction
     # For outgoing calls: destinationName is the called party (contact)
     # For incoming calls: calleridName is the caller (contact)
+    # NOTE: Rise CRM only accepts alphabet characters in company_name
     if is_outgoing:
-        # For outgoing calls, use destinationName or fall back to formatted phone
+        # For outgoing calls, use destinationName
         dest_name = call_details.get("destinationName")
         if dest_name and dest_name.strip():
-            contact_name = dest_name.strip()
-        elif phone:
-            # Format phone number as a valid name (remove + and prefix with "Lead")
-            clean_phone = phone.replace("+", "").replace("-", "").replace(" ", "")
-            contact_name = f"Lead {clean_phone}"
+            # Clean the name - keep only letters and spaces
+            clean_name = ''.join(c for c in dest_name if c.isalpha() or c.isspace()).strip()
+            contact_name = clean_name if clean_name else "Kixie Outbound Contact"
         else:
-            contact_name = "Unknown Lead"
+            # Use generic name when no contact name available
+            contact_name = "Kixie Outbound Contact"
     else:
         # For incoming calls, use calleridName
         caller_name = (
@@ -62,13 +62,12 @@ def parse_kixie_payload(raw_data: dict) -> KixieCallEvent:
             f"{call_details.get('fname', '')} {call_details.get('lname', '')}".strip()
         )
         if caller_name and caller_name.strip():
-            contact_name = caller_name.strip()
-        elif phone:
-            # Format phone number as a valid name
-            clean_phone = phone.replace("+", "").replace("-", "").replace(" ", "")
-            contact_name = f"Lead {clean_phone}"
+            # Clean the name - keep only letters and spaces
+            clean_name = ''.join(c for c in caller_name if c.isalpha() or c.isspace()).strip()
+            contact_name = clean_name if clean_name else "Kixie Inbound Contact"
         else:
-            contact_name = "Unknown Lead"
+            # Use generic name when no contact name available
+            contact_name = "Kixie Inbound Contact"
     
     # Extract agent email (the Kixie user who made/received the call)
     agent_email = call_details.get("email")

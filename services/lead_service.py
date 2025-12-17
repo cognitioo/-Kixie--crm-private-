@@ -56,6 +56,7 @@ async def create_lead_from_call(event: KixieCallEvent) -> dict:
     
     # Resolve owner ID from Kixie agent email
     owner_id = await user_mapper.get_owner_id(event.agent_email)
+    logger.info(f"Using owner ID: {owner_id} (agent email: {event.agent_email})")
     
     # Get lead status based on call status (answered/not answered)
     lead_status_id = get_lead_status_id(event.call_status, settings)
