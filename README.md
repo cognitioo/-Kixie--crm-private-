@@ -150,3 +150,4 @@ For issues with this integration, check:
 1. Railway deployment logs
 2. Rise CRM API Management for token status
 3. Kixie webhook delivery status
+4. Feel free to tell about devloper about anything if gone wrong  or contact at wa
