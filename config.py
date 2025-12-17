@@ -17,12 +17,15 @@ class Settings(BaseSettings):
     # Default owner email for fallback
     default_owner_email: str
     
-    # Lead Status and Source IDs (must be configured based on Rise CRM setup)
+    # Lead Status IDs (must be configured based on Rise CRM setup)
     # These IDs need to be obtained from the Rise CRM admin panel
-    default_lead_status_id: int = 1  # "Novo Lead" status ID
+    default_lead_status_id: int = 1  # For "answered" calls
+    missed_call_status_id: int = 1   # For "not answered" calls (set to different ID if available)
+    
+    # Lead Source ID
     default_lead_source_id: int = 1  # "Kixie" source ID
     
-    # Optional: Default owner ID (if known)
+    # Default owner ID (if no email match found)
     default_owner_id: int = 1
 
     class Config:
