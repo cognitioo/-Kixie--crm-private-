@@ -13,33 +13,60 @@ def parse_kixie_payload(raw_data: dict) -> KixieCallEvent:
     Parse the nested Kixie webhook payload into our KixieCallEvent model.
     
     Kixie sends: { "data": { "callDetails": {...}, "number": "..." } }
-    We need to extract and map the fields.
+    We need to extract and map the fields based on call direction.
     """
     data = raw_data.get("data", raw_data)  # Handle both nested and flat
     call_details = data.get("callDetails", data)
     
-    # Extract phone number (try multiple fields)
-    phone = (
-        call_details.get("tonumber") or 
-        call_details.get("tonumber164") or
-        data.get("number") or
-        data.get("customernumber") or
-        ""
-    )
+    # Determine call direction
+    call_type = call_details.get("calltype", "").lower()
+    is_outgoing = call_type == "outgoing"
     
-    # Extract contact name
-    contact_name = (
-        call_details.get("calleridName") or
-        call_details.get("destinationName") or
-        f"{call_details.get('fname', '')} {call_details.get('lname', '')}".strip() or
-        None
-    )
+    # Extract phone number (the contact's number)
+    # For outgoing: tonumber is the contact being called
+    # For incoming: fromnumber is the contact calling
+    if is_outgoing:
+        phone = (
+            call_details.get("tonumber") or 
+            call_details.get("tonumber164") or
+            data.get("number") or
+            ""
+        )
+    else:
+        phone = (
+            call_details.get("fromnumber") or 
+            call_details.get("fromnumber164") or
+            data.get("customernumber") or
+            data.get("number") or
+            ""
+        )
     
-    # Extract agent email
+    # Extract contact name based on call direction
+    # For outgoing calls: destinationName is the called party (contact)
+    # For incoming calls: calleridName is the caller (contact)
+    if is_outgoing:
+        # For outgoing calls, use destinationName or fall back to phone number
+        contact_name = (
+            call_details.get("destinationName") or
+            phone or  # Use phone as name if no name available
+            None
+        )
+    else:
+        # For incoming calls, use calleridName
+        contact_name = (
+            call_details.get("calleridName") or
+            f"{call_details.get('fname', '')} {call_details.get('lname', '')}".strip() or
+            phone or
+            None
+        )
+    
+    # Extract agent email (the Kixie user who made/received the call)
     agent_email = call_details.get("email")
     
     # Extract call ID
     call_id = call_details.get("callid") or call_details.get("externalid")
+    
+    logger.info(f"Call type: {call_type}, Contact name: {contact_name}, Phone: {phone}")
     
     return KixieCallEvent(
         phone_number=phone,
