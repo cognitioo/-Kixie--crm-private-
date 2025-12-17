@@ -1,0 +1,1757 @@
+👋 Introduction
+The RISE API operates over HTTPS and uses JSON as its data format. The API is a RESTful API and utilizes HTTP methods and HTTP status codes to specify requests and responses. A token is bound to a whole RISE installation. To interact with the API of another RISE's installation, you have to create a new token inside this installation.
+
+‍💻Getting started
+To get started using the API you first need an API token, after activating our plugin.
+
+As long as you download our API plugin from CodeCanyon, extract its contens. File upload.zip contains the plugin files (in a plugin format) that you upload in RISE CRM's Plugins installation section.
+
+✏️ ️API activation
+Step 1) Navigate to Settings -> Plugins -> Install plugin (upper right area).
+
+Step 2) Drag n drop the downloaded file from envato and enter your license key. Press install and the plugin should be installed.
+
+Step 3) Close the screen and select the actions in the right area of the activated API plugin, then select Activate from the dropdown actions list.
+
+Step 4) Once the plugin is activated successfuly, a new menu will appear in your admin area's dashboard, called API Management. This is the management area for the API users. You will need to browse there and created API tokens/users for authenticated use.
+
+Step 5) Create your first user and copy the necessary token - it will need to be used in every API command.
+
+⛓️ Usage of the API
+Available commands of the API are described below, along with their request-response examples for every endpoint.
+We are using authtoken header value for authentication and multipart-form type for data operations (POST/PUT).
+
+
+Keep in mind that if your installation contains an /index.php/ routed URL, you will need to include this in your API Postman commands.
+Trailing slash is usually ignored or eliminated by most of webservers, but in case you receive a Route not found error at the command sent, you can safely ignore including it.
+
+
+
+If you are not familiar with REST APIs, we strongly suggest that you hire a professional, in order to have your third party connections done.
+Familiarization with REST APIs is a prerequisite for this item and getting you into its learning falls outside the scope of the support of this item.
+📇 Sample usage (example command)
+Scenario: Your token is jEheVytlAoFl7F8MqUQ7jAo2hOXAS and that you need to list all available customers of your Perfex's installation, through a cURL request.
+
+
+Use Case: You will need to execute the following terminal command:
+
+curl -H "authtoken: jEheVytlAoFl7F8MqUQ7jAo2hOXAS" https://yourdomain.com/index.php/api/tickets
+
+Leads
+Leads - Add New Lead
+POST yourdomain.com/index.php/api/leads
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+company_name	string	
+Mandatory Lead Name.
+
+owner_id	string	
+Mandatory Lead owner id.
+
+lead_status_id	string	
+Mandatory Lead status id.
+
+lead_source_id	string	
+Mandatory Lead source id.
+
+address	string	
+Optional Lead address.
+
+city	string	
+Optional Lead city.
+
+state	string	
+Optional Lead state.
+
+zip	string	
+Optional Lead zip.
+
+country	string	
+Optional Lead country.
+
+phone	string	
+Optional Lead phone.
+
+website	string	
+Optional Lead website.
+
+vat_number	string	
+Optional Lead vat number.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Lead add successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Lead add fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Lead add successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Lead add fail."
+}
+Leads - Delete a Lead
+DELETE yourdomain.com/index.php/api/leads/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+lead unique ID.
+
+Success 200
+Field	Type	Description
+status	String	
+Request status.
+
+message	String	
+Lead Deleted Successfully.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Lead Delete Fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Lead Deleted Successfully."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Lead Delete Fail."
+}
+Leads - List all leads information
+GET yourdomain.com/index.php//api/leads/:leadid
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+leadid	Number	
+Mandatory Lead unique ID
+
+Success 200
+Field	Type	Description
+Leads	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+		"id": "2",
+		"company_name": "Test",
+		"address": "",
+		"city": "",
+		"state": "",
+		"zip": "",
+		"country": "",
+		"created_date": "2021-09-12",
+		"website": "",
+		"phone": "",
+		"currency_symbol": "",
+		"starred_by": "",
+		"group_ids": "",
+		"deleted": "0",
+		"is_lead": "1",
+		"lead_status_id": "1",
+		"owner_id": "1",
+		"created_by": "1",
+		"sort": "0",
+		"lead_source_id": "1",
+		"last_lead_status": "",
+		"client_migration_date": "0000-00-00",
+		"vat_number": "",
+		"currency": "",
+		"disable_online_payment": "0",
+		"primary_contact": null,
+		"primary_contact_id": null,
+		"contact_avatar": null,
+		"total_projects": null,
+		"payment_received": "0",
+		"invoice_value": "0",
+		"client_groups": null,
+		"lead_status_title": "New",
+		"lead_status_color": "#f1c40f",
+		"owner_name": "john doe",
+		"owner_avatar": null
+}
+Leads - Search Leads Information
+GET yourdomain.com/index.php//api/projects/search/:keysearch
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+keysearch	String	
+Search Keywords
+
+Success 200
+Field	Type	Description
+Leads	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+		"id": "2",
+		"company_name": "Test",
+		"address": "",
+		"city": "",
+		"state": "",
+		"zip": "",
+		"country": "",
+		"created_date": "2021-09-12",
+		"website": "",
+		"phone": "",
+		"currency_symbol": "",
+		"starred_by": "",
+		"group_ids": "",
+		"deleted": "0",
+		"is_lead": "1",
+		"lead_status_id": "1",
+		"owner_id": "1",
+		"created_by": "1",
+		"sort": "0",
+		"lead_source_id": "1",
+		"last_lead_status": "",
+		"client_migration_date": "0000-00-00",
+		"vat_number": "",
+		"currency": "",
+		"disable_online_payment": "0",
+		"primary_contact": null,
+		"primary_contact_id": null,
+		"contact_avatar": null,
+		"total_projects": null,
+		"payment_received": "0",
+		"invoice_value": "0",
+		"client_groups": null,
+		"lead_status_title": "New",
+		"lead_status_color": "#f1c40f",
+		"owner_name": "john doe",
+		"owner_avatar": null
+}
+Leads - Update a Lead
+PUT yourdomain.com/index.php/api/leads/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+lead unique ID.
+
+company_name	string	
+Mandatory Lead Name.
+
+owner_id	string	
+Mandatory Lead owner id.
+
+lead_status_id	string	
+Mandatory Lead status id.
+
+lead_source_id	string	
+Mandatory Lead source id.
+
+address	string	
+Optional Lead address.
+
+city	string	
+Optional Lead city.
+
+state	string	
+Optional Lead state.
+
+zip	string	
+Optional Lead zip.
+
+country	string	
+Optional Lead country.
+
+phone	string	
+Optional Lead phone.
+
+website	string	
+Optional Lead website.
+
+vat_number	string	
+Optional Lead vat number.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Lead Update Successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Lead Update Fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Lead Update Successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Lead Update Fail."
+}
+Projects
+Projects - Add New Project
+POST yourdomain.com/index.php/api/projects
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+title	string	
+Mandatory Project Title.
+
+client_id	string	
+Mandatory Project client id.
+
+start_date	string	
+Mandatory Project Start Date.
+
+description	string	
+Optional Project description.
+
+deadline	string	
+Optional Project deadline.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Project add successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Project add fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Project add successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Project add fail."
+}
+Projects - Delete a Project
+DELETE yourdomain.com/index.php/api/projects/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+project unique ID.
+
+Success 200
+Field	Type	Description
+status	String	
+Request status.
+
+message	String	
+Project Deleted Successfully.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Project Delete Fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Project Deleted Successfully."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Project Delete Fail."
+}
+Projects - List all Project Information
+GET yourdomain.com/index.php//api/projects/
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Project	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+		"id": "2",
+		"title": "project 1",
+		"description": "",
+		"start_date": null,
+		"deadline": null,
+		"client_id": "2",
+		"created_date": "2021-09-12",
+		"created_by": "1",
+		"status": "open",
+		"starred_by": "",
+		"estimate_id": "0",
+		"order_id": "0",
+		"deleted": "0",
+		"company_name": "jdoe",
+		"currency_symbol": "INR",
+		"total_points": null,
+		"completed_points": null
+}
+Projects - Search Project information
+GET yourdomain.com/index.php//api/projects/search/:keysearch
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+keysearch	String	
+Search Keywords
+
+Success 200
+Field	Type	Description
+Project	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+		"id": "2",
+		"title": "project 1",
+		"description": "",
+		"start_date": null,
+		"deadline": null,
+		"client_id": "2",
+		"created_date": "2021-09-12",
+		"created_by": "1",
+		"status": "open",
+		"starred_by": "",
+		"estimate_id": "0",
+		"order_id": "0",
+		"deleted": "0",
+		"company_name": "jdoe",
+		"currency_symbol": "INR",
+		"total_points": null,
+		"completed_points": null
+}
+Projects - Update a Project
+PUT yourdomain.com/index.php/api/projects/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+project unique ID.
+
+title	string	
+Mandatory Project Title.
+
+client_id	string	
+Mandatory Project client id.
+
+start_date	string	
+Mandatory Project Start Date.
+
+description	string	
+Optional Project description.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Project Update Successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Project Update Fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Project Update Successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Project Update Fail."
+}
+Tickets
+Tickets - Add New Ticket
+POST yourdomain.com/index.php/api/tickets
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+title	string	
+Mandatory Ticket title.
+
+client_id	int	
+Mandatory Ticket client_id.
+
+requested_by_id	int	
+Mandatory Ticket requested_by_id.
+
+ticket_type_id	int	
+Mandatory Ticket ticket_type_id.
+
+description	int	
+Mandatory Ticket description.
+
+assigned_to	int	
+Mandatory Ticket assigned_to.
+
+ticket_labels	string	
+Optional Ticket ticket_labels.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Ticket add successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Ticket add fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Ticket add successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Ticket add fail."
+}
+Tickets - Delete a Ticket
+DELETE yourdomain.com/index.php/api/tickets/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+ticket unique ID.
+
+Success 200
+Field	Type	Description
+status	String	
+Request status.
+
+message	String	
+Ticket Deleted Successfuly.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Ticket Delete Fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Ticket Deleted Successfuly."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Ticket Delete Fail."
+}
+Tickets - List all Tickets information
+GET yourdomain.com/index.php//api/tickets/:ticketid
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+ticketid	Number	
+Mandatory ticket unique ID
+
+Success 200
+Field	Type	Description
+Tickets	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "1",
+  "client_id": "2",
+  "project_id": "0",
+  "ticket_type_id": "1",
+  "title": "Title",
+  "created_by": "1",
+  "requested_by": "4",
+  "created_at": "2021-09-12 06:47:36",
+  "status": "new",
+  "last_activity_at": "2021-09-12 06:47:36",
+  "assigned_to": "3",
+  "creator_name": "",
+  "creator_email": "",
+  "labels": "9,10",
+  "task_id": "0",
+  "closed_at": "0000-00-00 00:00:00",
+  "deleted": "0",
+  "ticket_type": "General Support",
+  "company_name": "Company",
+  "project_title": null,
+  "task_title": null,
+ "assigned_to_user": "john doe",
+  "assigned_to_avatar": null,
+  "labels_list": "9--::--label 2--::--#ad159e,10--::--label 3--::--#29c2c2",
+  "requested_by_name": "john doe"
+	}
+Tickets - Search Ticket Information
+GET yourdomain.com/index.php//api/tickets/search/:keysearch
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+keysearch	String	
+Search Keywords
+
+Success 200
+Field	Type	Description
+Tickets	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "1",
+  "client_id": "2",
+  "project_id": "0",
+  "ticket_type_id": "1",
+  "title": "Title",
+  "created_by": "1",
+  "requested_by": "4",
+  "created_at": "2021-09-12 06:47:36",
+  "status": "new",
+  "last_activity_at": "2021-09-12 06:47:36",
+  "assigned_to": "3",
+  "creator_name": "",
+  "creator_email": "",
+  "labels": "9,10",
+  "task_id": "0",
+  "closed_at": "0000-00-00 00:00:00",
+  "deleted": "0",
+  "ticket_type": "General Support",
+  "company_name": "Company",
+  "project_title": null,
+  "task_title": null,
+ "assigned_to_user": "john doe",
+  "assigned_to_avatar": null,
+  "labels_list": "9--::--label 2--::--#ad159e,10--::--label 3--::--#29c2c2",
+  "requested_by_name": "john doe"
+	}
+Tickets - Update a Ticket
+PUT yourdomain.com/index.php/api/tickets/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+tickets unique ID.
+
+title	string	
+Mandatory Ticket title.
+
+client_id	int	
+Mandatory Ticket client_id.
+
+requested_by_id	int	
+Mandatory Ticket requested_by_id.
+
+ticket_type_id	int	
+Mandatory Ticket ticket_type_id.
+
+assigned_to	int	
+Mandatory Ticket assigned_to.
+
+ticket_labels	string	
+Optional Ticket ticket_labels.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Ticket update successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Ticket update fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Ticket update successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Ticket update fail."
+}
+Invoices
+Invoices - Add an Invoice
+POST yourdomain.com/index.php/api/invoices
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+invoice_bill_date	string	
+Optional invoice bill date.
+
+invoice_due_date	string	
+Mandatory invoice due date .
+
+invoice_client_id	string	
+Mandatory invoice client id.
+
+invoice_project_id	string	
+Optional invoice project id.
+
+tax_id	string	
+Optional invoice tax id.
+
+tax_id2	string	
+Optional invoice tax id2.
+
+tax_id3	string	
+Optional invoice tax id3.
+
+recurring	string	
+Optional invoice recurring.
+
+invoice_note	string	
+Optional invoice note.
+
+labels	string	
+Optional invoice labels.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Invoice add successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Invoice add fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Invoice add successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Invoice add fail."
+}
+Invoices - Delete an Invoice
+DELETE yourdomain.com/index.php/api/invoices/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+invoice unique ID.
+
+Success 200
+Field	Type	Description
+status	String	
+Request status.
+
+message	String	
+Invoice Delete Successfuly.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Invoice Delete Fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Invoice Delete Successfuly."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Invoice Delete Fail."
+}
+Invoices - Edit an Invoice
+PUT yourdomain.com/index.php/api/invoices/:id
+Parameter
+Field	Type	Description
+invoice_bill_date	string	
+Optional Invoice Bill Date.
+
+invoice_due_date	string	
+Mandatory Invoice Due Date.
+
+invoice_client_id	string	
+Mandatory Invoice CLient id.
+
+invoice_project_id	string	
+Optional Invoice Poject id.
+
+tax_id	string	
+Optional Invoice Tax id.
+
+tax_id2	string	
+Optional Invoice Tax id2.
+
+tax_id3	string	
+Optional Invoice Tax id3.
+
+recurring	string	
+Optional Invoice Recurring.
+
+invoice_note	string	
+Optional Invoice Invoice note
+
+labels	string	
+Optional Invoice Label.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Invoice Update Successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Invoice Update Fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Invoice Update Successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Invoice Update Fail."
+}
+Invoices - List all Invoice information
+GET yourdomain.com/index.php//api/invoices/:invoiceid
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+invoiceid	Number	
+Mandatory invoice unique ID
+
+Success 200
+Field	Type	Description
+Invoice	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+ {
+  "id": "1",
+  "client_id": "2",
+  "project_id": "1",
+  "bill_date": "2021-09-12",
+  "due_date": "2021-10-01",
+  "note": "",
+  "labels": "",
+  "last_email_sent_date": "2021-09-12",
+  "status": "not_paid",
+  "tax_id": "1",
+  "tax_id2": "1",
+  "tax_id3": "0",
+  "recurring": "0",
+  "recurring_invoice_id": "0",
+  "repeat_every": "1",
+  "repeat_type": "months",
+  "no_of_cycles": "0",
+  "next_recurring_date": null,
+  "no_of_cycles_completed": "0",
+  "due_reminder_date": null,
+  "recurring_reminder_date": null,
+  "discount_amount": "1",
+  "discount_amount_type": "percentage",
+  "discount_type": "after_tax",
+  "cancelled_at": null,
+  "cancelled_by": "0",
+  "files": "a:0:{}",
+  "deleted": "0",
+  "currency": "USD",
+  "currency_symbol": "INR",
+  "company_name": "Company",
+  "project_title": "project 1",
+  "invoice_value": "1188",
+  "payment_received": "0",
+  "tax_percentage": "10",
+  "tax_percentage2": "10",
+  "tax_percentage3": null,
+  "cancelled_by_user": null,
+  "labels_list": null
+}
+Invoices - Search invoice Information
+GET yourdomain.com/index.php//api/invoices/search/:keysearch
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+keysearch	String	
+Search Keywords
+
+Success 200
+Field	Type	Description
+Invoices	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+ {
+  "id": "1",
+  "client_id": "2",
+  "project_id": "1",
+  "bill_date": "2021-09-12",
+  "due_date": "2021-10-01",
+  "note": "",
+  "labels": "",
+  "last_email_sent_date": "2021-09-12",
+  "status": "not_paid",
+  "tax_id": "1",
+  "tax_id2": "1",
+  "tax_id3": "0",
+  "recurring": "0",
+  "recurring_invoice_id": "0",
+  "repeat_every": "1",
+  "repeat_type": "months",
+  "no_of_cycles": "0",
+  "next_recurring_date": null,
+  "no_of_cycles_completed": "0",
+  "due_reminder_date": null,
+  "recurring_reminder_date": null,
+  "discount_amount": "1",
+  "discount_amount_type": "percentage",
+  "discount_type": "after_tax",
+  "cancelled_at": null,
+  "cancelled_by": "0",
+  "files": "a:0:{}",
+  "deleted": "0",
+  "currency": "USD",
+  "currency_symbol": "INR",
+  "company_name": "Company",
+  "project_title": "project 1",
+  "invoice_value": "1188",
+  "payment_received": "0",
+  "tax_percentage": "10",
+  "tax_percentage2": "10",
+  "tax_percentage3": null,
+  "cancelled_by_user": null,
+  "labels_list": null
+}
+Miscellaneous
+Miscellaneous - List Client Groups
+GET yourdomain.com/index.php//api/client_groups
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Clients	Object	
+Groups information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "1",
+  "title": "Test c group ",
+  "deleted": "0"
+	}
+Miscellaneous - List Contact by ClientID
+GET yourdomain.com/index.php//api/contact_by_clientid/:clinetid
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Client	Object	
+Contact information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "6",
+  "first_name": "Fname",
+  "last_name": "Lname",
+  "user_type": "client",
+  "is_admin": "0",
+  "role_id": "0",
+  "email": "contact@email.pvt.ltd",
+  "password": "$2y$10$02jBZmmhPx3a6plQpsqaFuQoWgTraZuUllc8eiCCiKUCnyVy2wDTa",
+  "image": null,
+  "status": "active",
+  "message_checked_at": null,
+  "client_id": "3",
+  "notification_checked_at": null,
+  "is_primary_contact": "0",
+  "job_title": "HR",
+  "disable_login": "0",
+  "note": "",
+  "address": null,
+  "alternative_address": null,
+  "phone": "1234567890",
+  "alternative_phone": null,
+  "dob": null,
+  "ssn": null,
+  "gender": "male",
+  "sticky_note": null,
+  "skype": "",
+  "enable_web_notification": "1",
+  "enable_email_notification": "1",
+  "created_at": "2021-09-18 11:26:56",
+  "last_online": null,
+  "requested_account_removal": "0",
+  "deleted": "0"
+  "role_title": null,
+  "date_of_hire": null,
+  "salary": null,
+  "salary_term": null
+	}
+Miscellaneous - List Invoice Labels
+GET yourdomain.com/index.php//api/invoice_labels
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Invoice	Object	
+Labels information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+[
+    {
+        "id": "2",
+        "title": "title1",
+        "color": "#aab7b7",
+        "context": "invoice label 1",
+        "user_id": "0",
+        "deleted": "0"
+    },
+    {
+        "id": "1",
+        "title": "title2",
+        "color": "#83c340",
+        "context": "invoice label 2",
+        "user_id": "0",
+        "deleted": "0"
+    }
+]
+Miscellaneous - List Invoice Taxes
+GET yourdomain.com/index.php//api/invoice_tax
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Invoice	Object	
+Taxes information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "1",
+  "title": "Tax (10%)",
+  "percentage": "10",
+  "deleted": "0"
+	}
+Miscellaneous - List Project Labels
+GET yourdomain.com/index.php//api/project_labels
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Project	Object	
+Labels information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+[{
+  "id": "1",
+  "title": "Hourly Project",
+  "color": "#83c340",
+  "context": "project",
+  "user_id": "0",
+  "deleted": "0"
+	},
+	{
+  "id": "2",
+  "title": "Fixed Project",
+  "color": "#ffc310",
+  "context": "project",
+  "user_id": "0",
+  "deleted": "0"
+	}]
+Miscellaneous - List Project Members
+GET yourdomain.com/index.php//api/getProjectMembers
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Project	Object	
+Members information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "6",
+  "user_id": "1",
+  "project_id": "1",
+  "is_leader": "1",
+  "deleted": "0",
+  "member_name": "Fname Lname",
+  "member_image": null,
+  "job_title": "Admin",
+  "user_type": "staff"     *
+	}
+Miscellaneous - List Staff Owner
+GET yourdomain.com/index.php//api/staff_owner
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Staff	Object	
+Owner information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "6",
+  "first_name": "Fname",
+  "last_name": "Lname",
+  "user_type": "client",
+  "is_admin": "0",
+  "role_id": "0",
+  "email": "contact@email.pvt.ltd",
+  "password": "$2y$10$02jBZmmhPx3a6plQpsqaFuQoWgTraZuUllc8eiCCiKUCnyVy2wDTa",
+  "image": null,
+  "status": "active",
+  "message_checked_at": null,
+  "client_id": "3",
+  "notification_checked_at": null,
+  "is_primary_contact": "0",
+  "job_title": "HR",
+  "disable_login": "0",
+  "note": "",
+  "address": null,
+  "alternative_address": null,
+  "phone": "1234567890",
+  "alternative_phone": null,
+  "dob": null,
+  "ssn": null,
+  "gender": "male",
+  "sticky_note": null,
+  "skype": "",
+  "enable_web_notification": "1",
+  "enable_email_notification": "1",
+  "created_at": "2021-09-18 11:26:56",
+  "last_online": null,
+  "requested_account_removal": "0",
+  "deleted": "0"
+  "role_title": null,
+  "date_of_hire": null,
+  "salary": null,
+  "salary_term": null
+	}
+Miscellaneous - List Ticket Labels
+GET yourdomain.com/index.php//api/ticket_labels
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Ticket	Object	
+Labels information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+[
+    {
+        "id": "12",
+        "title": "label 4",
+        "color": "#e74c3c",
+        "context": "ticket",
+        "user_id": "0",
+        "deleted": "0"
+    },
+    {
+        "id": "11",
+        "title": "label 4",
+        "color": "#f1c40f",
+        "context": "ticket",
+        "user_id": "0",
+        "deleted": "0"
+    },
+    {
+        "id": "10",
+        "title": "label 3",
+        "color": "#29c2c2",
+        "context": "ticket",
+        "user_id": "0",
+        "deleted": "0"
+    },
+    {
+        "id": "9",
+        "title": "label 2",
+        "color": "#ad159e",
+        "context": "ticket",
+        "user_id": "0",
+        "deleted": "0"
+    }
+]
+Miscellaneous - List Ticket Types
+GET yourdomain.com/index.php//api/ticket_type
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Success 200
+Field	Type	Description
+Tickets	Object	
+Types information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+  "id": "1",
+  "title": "General Support",
+  "deleted": "0"
+	}
+Clients
+Clients - Add New Client
+POST yourdomain.com/index.php/api/clients
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+company_name	string	
+Mandatory Company Name.
+
+owner_id	string	
+Mandatory Company owner id.
+
+group_ids	string	
+Optional Company group ids.
+
+address	string	
+Optional Company address.
+
+city	string	
+Optional Company city.
+
+state	string	
+Optional Company state.
+
+zip	string	
+Optional Company zip.
+
+country	string	
+Optional Company country.
+
+phone	string	
+Optional Company phone.
+
+website	string	
+Optional Company website.
+
+vat_number	string	
+Optional Company vat number.
+
+disable_online_payment	string	
+Optional Company disable online payment.
+
+Success 200
+Field	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Client add successful.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Client add fail.
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Client add successful."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Client add fail."
+}
+Clients - Delete a Client
+DELETE yourdomain.com/index.php/api/clients/:id
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+id	Number	
+clients unique ID.
+
+Success 200
+Field	Type	Description
+status	String	
+Request status.
+
+message	String	
+Client Deleted Successfully.
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status.
+
+message	String	
+Client Delete Fail..
+
+Success-Response:
+HTTP/1.1 200 OK
+{
+  "status": true,
+  "message": "Client Deleted Successfully."
+}
+Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "status": false,
+  "message": "Client Delete Fail."
+}
+Clients - List all Clients information
+GET yourdomain.com/index.php//api/clients/:clientid
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+clientid	Number	
+Mandatory Clientid unique ID
+
+Success 200
+Field	Type	Description
+Clients	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+		"id": "2",
+		"company_name": "jdoe",
+		"address": "Rajkot",
+		"city": "",
+		"state": "",
+		"zip": "",
+		"country": "",
+		"created_date": "2021-09-12",
+		"website": "",
+		"phone": "",
+		"currency_symbol": "INR",
+		"starred_by": "",
+		"group_ids": "1",
+		"deleted": "0",
+		"is_lead": "0",
+		"lead_status_id": "1",
+		"owner_id": "1",
+		"created_by": "1",
+		"sort": "0",
+		"lead_source_id": "1",
+		"last_lead_status": "New",
+		"client_migration_date": "2021-09-12",
+		"vat_number": "",
+		"currency": "USD",
+		"disable_online_payment": "1",
+		"primary_contact": "john doe",
+		"primary_contact_id": "4",
+		"contact_avatar": null,
+		"total_projects": "7",
+		"payment_received": "0",
+		"invoice_value": "1188",
+		"client_groups": "Test c group ",
+		"lead_status_title": "New",
+		"lead_status_color": "#f1c40f",
+		"owner_name": "john doe",
+		"owner_avatar": null
+}
+Clients - Search Client Information
+GET yourdomain.com/index.php//api/getClientsSearch/search/:keysearch
+Header
+Field	Type	Description
+authtoken	String	
+Authentication token, generated from admin area
+
+Parameter
+Field	Type	Description
+keysearch	String	
+Search Keywords
+
+Success 200
+Field	Type	Description
+Clients	Object	
+information
+
+Error 4xx
+Name	Type	Description
+status	Boolean	
+Request status
+
+message	String	
+No data were found
+
+Success-Response:
+{
+		"id": "2",
+		"company_name": "jdoe",
+		"address": "Rajkot",
+		"city": "",
+		"state": "",
+		"zip": "",
+		"country": "",
+		"created_date": "2021-09-12",
+		"website": "",
+		"phone": "",
+		"currency_symbol": "INR",
+		"starred_by": "",
+		"group_ids": "1",
+		"deleted": "0",
+		"is_lead": "0",
+		"lead_status_id": "1",
+		"owner_id": "1",
+		"created_by": "1",
+		"sort": "0",
+		"lead_source_id": "1",
+		"last_lead_status": "New",
+		"client_migration_date": "2021-09-12",
+		"vat_number": "",
+		"currency": "USD",
+		"disable_online_payment": "1",
+		"primary_contact": "john doe",
+		"primary_contact_id": "4",
+		"contact_avatar": null,
+		"total_projects": "7",
+		"payment_received": "0",
+		"invoice_value": "1188",
+		"client_groups": "Test c group ",
+		"lead_status_title": "New",
+		"lead_status_color": "#f1c40f",
+		"owner_name": "john doe",
+		"owner_avatar": null
+}

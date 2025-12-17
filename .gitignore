@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv
+env/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Test files
+test_*.py
+debug_*.py
+tester.py
+
+# Plugin source (not needed for deployment)
+RestApi/
+
+# OS files
+.DS_Store
+Thumbs.db
