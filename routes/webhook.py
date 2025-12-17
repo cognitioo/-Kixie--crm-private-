@@ -45,20 +45,30 @@ def parse_kixie_payload(raw_data: dict) -> KixieCallEvent:
     # For outgoing calls: destinationName is the called party (contact)
     # For incoming calls: calleridName is the caller (contact)
     if is_outgoing:
-        # For outgoing calls, use destinationName or fall back to phone number
-        contact_name = (
-            call_details.get("destinationName") or
-            phone or  # Use phone as name if no name available
-            None
-        )
+        # For outgoing calls, use destinationName or fall back to formatted phone
+        dest_name = call_details.get("destinationName")
+        if dest_name and dest_name.strip():
+            contact_name = dest_name.strip()
+        elif phone:
+            # Format phone number as a valid name (remove + and prefix with "Lead")
+            clean_phone = phone.replace("+", "").replace("-", "").replace(" ", "")
+            contact_name = f"Lead {clean_phone}"
+        else:
+            contact_name = "Unknown Lead"
     else:
         # For incoming calls, use calleridName
-        contact_name = (
+        caller_name = (
             call_details.get("calleridName") or
-            f"{call_details.get('fname', '')} {call_details.get('lname', '')}".strip() or
-            phone or
-            None
+            f"{call_details.get('fname', '')} {call_details.get('lname', '')}".strip()
         )
+        if caller_name and caller_name.strip():
+            contact_name = caller_name.strip()
+        elif phone:
+            # Format phone number as a valid name
+            clean_phone = phone.replace("+", "").replace("-", "").replace(" ", "")
+            contact_name = f"Lead {clean_phone}"
+        else:
+            contact_name = "Unknown Lead"
     
     # Extract agent email (the Kixie user who made/received the call)
     agent_email = call_details.get("email")
