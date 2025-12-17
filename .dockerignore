@@ -27,7 +27,8 @@ tester.py
 
 # Documentation source
 RestApi/
-*.txt
+*_documentaion.txt
+*_documentation.txt
 
 # OS
 .DS_Store
