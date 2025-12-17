@@ -79,9 +79,14 @@ class RiseCRMClient:
                 # Try to parse JSON response
                 try:
                     result = response.json()
-                    logger.debug(f"Response: {result}")
+                    # Log full response if error
+                    if response.status_code >= 400:
+                        logger.error(f"API Error Response: {result}")
+                    else:
+                        logger.debug(f"Response: {result}")
                     return result
                 except Exception:
+                    logger.error(f"Raw response: {response.text}")
                     return {"status": False, "message": response.text}
                     
             except httpx.HTTPStatusError as e:
